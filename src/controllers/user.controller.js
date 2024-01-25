@@ -4,6 +4,7 @@ import { User } from '../models/user.model.js'
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { APIResponse } from '../utils/APIResponse.js';
 import jwt from "jsonwebtoken"
+import {v2 as cloudinary} from 'cloudinary';
 
 // Custom functions
 const generateAccessAndRefreshTokens = async(userId) => {
@@ -130,7 +131,7 @@ const loginUser = asyncHandler(async(req,res) => {
 const logoutUser = asyncHandler(async(req,res) => {
     await User.findByIdAndUpdate(req.user._id,
         {
-            $set: {refreshToken:undefined}
+            $unset: {refreshToken:1}
         },
         {
             new:true
@@ -234,9 +235,11 @@ const updateUserAvatar = asyncHandler(async(req,res) => {
     if(!avatarLocalPath){
         throw new APIError(400, "Avatar file is missing")
     }
+    // console.log(avatarLocalPath);
 
-    // const oldAvatar = avatar.url
+    const oldAvatar = req.user.avatar
     // console.log(oldAvatar);
+    cloudinary.uploader.destroy(req.user.avatar);    
 
     const avatar = await uploadOnCloudinary(avatarLocalPath);
     
