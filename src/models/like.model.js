@@ -15,7 +15,7 @@ const likeSchema = new Schema(
             ref:"Video"
         },
         likedBy:{
-            type: Schema.Types.ObjectId,
+            type: Schema.T.ObjectId,
             ref: "User"
         }
     },{timestamps:true}
