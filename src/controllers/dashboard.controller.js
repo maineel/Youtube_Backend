@@ -127,7 +127,7 @@ const getChannelVideos = asyncHandler(async (req, res) => {
         new ApiResponse(
             200,
             videos,
-            "channel stats fetched successfully"
+            "channel videos fetched successfully"
         )
     );
 })
